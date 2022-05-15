@@ -41,7 +41,17 @@ if (!isset($_SESSION['domain'])) {
         $p_name = $_POST['product_name'];
         $p_price = $_POST['product_price'];
         $body = $_POST['body'];
-       
+        $file = $_FILES['Timage'];
+        
+        if (!move_uploaded_file($file['tmp_name'], __DIR__ . '/../uploads/' . $file['name'])) 
+        {
+            
+            $TimgFlag=0;
+        }
+        else
+        {
+            $TimgFlag=1;
+        }
     }
 
     $queryDomain = "SELECT * FROM `domains` WHERE `id` = '{$d_id}'";
@@ -61,7 +71,14 @@ if (!isset($_SESSION['domain'])) {
     $_SESSION['~PRODUCT_NAME~'] = $p_name;
     $_SESSION['~PRODUCT_PRICE~'] = $p_price;
      $_SESSION['~BODY~'] = $body;
-
+    if($TimgFlag == 1)
+    {
+        $_SESSION['~IMG~'] = str_replace("includes/shoot_final.php", "uploads/Timage.PNG", $data['d_url']);
+    }
+    else
+    {
+        $_SESSION['~IMG~'] ="";
+    }
     $_SESSION['domain'] = $data['id'];
     $_SESSION['domain_url'] = $data['d_url'];
     $_SESSION['domain_name'] = $data['d_name'];
